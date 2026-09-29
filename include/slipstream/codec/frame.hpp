@@ -21,6 +21,7 @@ struct FrameHeader {
     std::uint8_t msg_type;   // See MsgType.
     std::uint8_t version;    // Protocol version (1 for MD/1 and OE/1).
 };
+static_assert(sizeof(FrameHeader) == 4, "FrameHeader must be exactly 4 bytes");
 #pragma pack(pop)
 
 constexpr std::size_t kFrameHeaderSize = sizeof(FrameHeader);  // Bytes consumed by a FrameHeader on the wire.

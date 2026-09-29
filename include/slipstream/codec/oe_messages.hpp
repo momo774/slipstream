@@ -4,7 +4,7 @@
 namespace slipstream::codec {
 
 #pragma pack(push, 1)
-// OE/1 order sent from server to the OE client. Wire size: 42 bytes, msg_type=10.
+// OE/1 order sent from server to the OE client. Wire size: 50 bytes, msg_type=10.
 struct NewOrder {
     std::uint64_t client_order_id;  // Strictly increasing, unique per process run.
     char symbol[12];
@@ -15,6 +15,7 @@ struct NewOrder {
     std::uint32_t qty;
     std::int64_t limit_px;          // Fixed-point x10,000.
 };
+static_assert(sizeof(NewOrder) == 50, "NewOrder must be exactly 50 bytes");
 
 // OE/1 execution report sent from the OE client back to the server (optional). Wire size: 30 bytes, msg_type=11.
 struct ExecReport {
@@ -25,6 +26,7 @@ struct ExecReport {
     std::int64_t avg_px;            // Fixed-point x10,000.
     std::uint8_t reason_code;       // 0=none, 1=risk, 2=price, 3=size, 4=throttle.
 };
+static_assert(sizeof(ExecReport) == 30, "ExecReport must be exactly 30 bytes");
 #pragma pack(pop)
 
 }  // namespace slipstream::codec
