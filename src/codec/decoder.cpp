@@ -44,41 +44,43 @@ std::optional<DecodedMessage> StreamDecoder::try_decode_next() {
     }
     MsgType msg_type{static_cast<MsgType>(msg_type_num)};
     if (expected_message_size(msg_type) != msg_size) {
+        this->buffer_.erase(this->buffer_.begin(), this->buffer_.begin() + 4 + msg_size);
         return std::nullopt;
     }
+
+    std::optional<DecodedMessage> result{};
     if (msg_type == MsgType::Quote) {
         Quote q{};
         std::memcpy(&q, this->buffer_.data() + 4, msg_size);
-        return q;
+        result = std::move(q);
     }
     if (msg_type == MsgType::Trade) {
         Trade t{};
         std::memcpy(&t, this->buffer_.data() + 4, msg_size);
-        return t;
+        result = std::move(t);
     }
     if (msg_type == MsgType::Heartbeat) {
         Heartbeat h{};
         std::memcpy(&h, this->buffer_.data() + 4, msg_size);
-        return h;
+        result = std::move(h);
     }
     if (msg_type == MsgType::SessionControl) {
         SessionControl sc{};
         std::memcpy(&sc, this->buffer_.data() + 4, msg_size);
-        return sc;
+        result = std::move(sc);
     }
     if (msg_type == MsgType::NewOrder) {
         NewOrder n{};
         std::memcpy(&n, this->buffer_.data() + 4, msg_size);
-        return n;
+        result = std::move(n);
     }
     if (msg_type == MsgType::ExecReport) {
         ExecReport e{};
         std::memcpy(&e, this->buffer_.data() + 4, msg_size);
-        return e;
+        result = std::move(e);
     }
-    this->buffer_.erase(this->buffer_.begin(), this->buffer_.end());
-    // should never reach
-    return std::nullopt;
+    this->buffer_.erase(this->buffer_.begin(), this->buffer_.begin() + 4 + msg_size);
+    return result;
 }
 }  // namespace slipstream::codec
 
