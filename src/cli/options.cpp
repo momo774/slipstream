@@ -8,6 +8,11 @@ namespace slipstream::cli {
 
 Options parse_options(int argc, char** argv) {
     Options opts{};
+    opts.transport = "tcp";
+    opts.md_host = "127.0.0.1";
+    opts.md_port = 14200;
+    opts.oe_host = "127.0.0.1";
+    opts.oe_port = 14300;
     for (int i = 1; i < argc; ++i) {
         const std::string arg = argv[i];
         if (i + 1 >= argc) {
@@ -24,7 +29,6 @@ Options parse_options(int argc, char** argv) {
         } else if (arg == "--vwap-window-ms") {
             opts.vwap_window_ms = std::stoull(value);
         } else if (arg == "--band-bps") {
-            // Stored in hundredths of a bp (25.5 -> 2550) so decision math stays integer-only.
             opts.band_bps = static_cast<std::uint32_t>(std::llround(std::stod(value) * 100));
         } else if (arg == "--transport") {
             opts.transport = value;

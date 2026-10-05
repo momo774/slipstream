@@ -27,7 +27,7 @@ void MdServer::run() {
             if (quote == nullptr) {
                 continue;
             }
-            std::string_view sv{quote->symbol, 20};
+            std::string_view sv{quote->symbol, 12};
             while (!sv.empty() && sv.back() == '\0') {
                 sv.remove_suffix(1);
             }
@@ -35,7 +35,7 @@ void MdServer::run() {
                 book_.on_quote(*quote);
                 ++quote_count_;
             } else {
-                std::cout << "dropped quote for " << symbol << '\n';
+                std::cout << "dropped quote for " << sv << '\n';
             }
         }
     }
