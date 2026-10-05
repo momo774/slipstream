@@ -12,11 +12,14 @@ add_executable(slipstream_tests
     codec/oe_codec_test.cpp
     codec/stream_reassembly_test.cpp
     codec/byte_order_test.cpp
+    marketdata/l1_book_test.cpp
+    marketdata/rolling_vwap_test.cpp
 )
 target_include_directories(slipstream_tests PRIVATE ${PROJECT_SOURCE_DIR}/include)
 target_link_libraries(slipstream_tests PRIVATE
     GTest::gtest_main
     slipstream_codec
+    slipstream_marketdata
 )
 
 include(GoogleTest)
