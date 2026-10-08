@@ -12,6 +12,7 @@ public:
     virtual std::size_t receive(std::uint8_t* buf, std::size_t len) = 0;  // Blocking read; 0 on close.
     virtual void send(const std::uint8_t* buf, std::size_t len) = 0;      // Blocking full write.
     virtual void close() = 0;                                            // Closes the connection.
+    virtual int fd() const = 0;
 };
 
 }  // namespace slipstream::transport

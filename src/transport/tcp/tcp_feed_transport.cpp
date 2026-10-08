@@ -60,6 +60,10 @@ void TcpFeedTransport::close() {
     fd_ = slipstream::net::SocketFd{}; // calls move assignment and closes it
 }
 
+int TcpFeedTransport::fd() const {
+    return fd_.get();
+}
+
 std::unique_ptr<IFeedTransport> accept_tcp_feed_transport(const std::string& host, std::uint16_t port) {
     int one{1};
     int raw_fd = ::socket(AF_INET, SOCK_STREAM, 0);

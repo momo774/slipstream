@@ -12,13 +12,15 @@ int main(int argc, char** argv) {
 
     try {
         const cli::Options options = cli::parse_options(argc, argv);
-
         marketdata::L1Book book;
         std::uint64_t quote_count = 0;
 
         server::MdServer md_server(options, book, quote_count);
         std::cout << "waiting for MD client on " << options.md_host << ':' << options.md_port << '\n';
-        md_server.run();
+        md_server.accept();
+        while (md_server.on_readable()) {
+
+        }
 
         std::cout << "MD client disconnected. " << options.symbol << " quotes: " << quote_count
                   << ", best bid " << core::to_display_price(book.best_bid())
