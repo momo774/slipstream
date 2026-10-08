@@ -20,6 +20,7 @@ public:
     void accept();
     bool on_readable();
     int fd() const;
+    void close();
 
 private:
     const slipstream::cli::Options& options_;  // Symbol filter and MD host/port.

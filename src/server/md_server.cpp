@@ -77,4 +77,10 @@ int MdServer::fd() const {
     return conn_ ? conn_->fd() : -1;
 }
 
+void MdServer::close() {
+    if (conn_) {
+        conn_->close();
+    }
+}
+
 }  // namespace slipstream::server
