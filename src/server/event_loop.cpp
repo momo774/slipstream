@@ -6,6 +6,7 @@
 #include <cerrno>
 #include <chrono>
 #include <cstdint>
+#include <iostream>
 #include <system_error>
 
 namespace slipstream::server {
@@ -47,6 +48,9 @@ void run_event_loop(MdServer& md, OeServer& oe) {
             oe.on_stdin();
             if (oe.closed()) {
                 break;  // Operator typed CLOSE.
+            }
+            if (std::cin.eof()) {
+                fds[2].fd = -1;  // stdin closed: poll() ignores negative fds, so stop watching it.
             }
         }
 

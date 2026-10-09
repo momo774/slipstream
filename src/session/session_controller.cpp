@@ -13,7 +13,9 @@ SessionController::SessionController(slipstream::transport::IFeedTransport& oe_t
 
 void SessionController::poll_stdin() {
     std::string line;
-    std::getline(std::cin, line);
+    if (!std::getline(std::cin, line)) {
+        return;  // End of input (Ctrl-D or piped stdin): nothing to read.
+    }
 
     if (line == "OPEN") {
         state_ = SessionState::Open;
