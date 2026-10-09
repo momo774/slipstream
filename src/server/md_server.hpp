@@ -15,8 +15,6 @@ public:
     MdServer(const slipstream::cli::Options& options, slipstream::marketdata::L1Book& book,
              std::uint64_t& quote_count);
 
-    void run();  // Accepts one MD client connection and processes quotes until it disconnects.
-
     void accept();
     bool on_readable();
     int fd() const;
