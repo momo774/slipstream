@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <string>
+#include "slipstream/metrics/latency_recorder.hpp"
 
 namespace slipstream::report {
 
@@ -16,6 +17,6 @@ struct ExecutionReport {
     double participation_cap;
 };
 
-void print_execution_report(const ExecutionReport& report);
+void print_execution_report(const ExecutionReport& report, const slipstream::metrics::LatencyRecorder& latency);
 
 }  // namespace slipstream::report

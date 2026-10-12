@@ -60,6 +60,8 @@ bool OeServer::on_readable() {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpedantic"
 void OeServer::handle_trade(const slipstream::codec::Trade& trade) {
+    const auto tick_ns = static_cast<std::uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(
+        std::chrono::steady_clock::now().time_since_epoch()).count());
     const std::uint32_t qty = trade.qty;
     const std::int64_t px = trade.px;
     vwap_.on_trade(trade);
@@ -91,6 +93,10 @@ void OeServer::handle_trade(const slipstream::codec::Trade& trade) {
 
     const auto bytes = codec::encode_new_order(order);
     conn_->send(bytes.data(), bytes.size());
+
+    const auto sent_ns = static_cast<std::uint64_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(
+        std::chrono::steady_clock::now().time_since_epoch()).count());
+    latency_.record(tick_ns, sent_ns);
 }
 #pragma GCC diagnostic pop
 
@@ -138,6 +144,10 @@ slipstream::report::ExecutionReport OeServer::build_report() const {
     report.participation_rate = market_qty_ == 0 ? 0.0 : executed / market;
     report.participation_cap = options_.participation_cap;
     return report;
+}
+
+const slipstream::metrics::LatencyRecorder& OeServer::latency() const {
+    return latency_;
 }
 
 }  // namespace slipstream::server

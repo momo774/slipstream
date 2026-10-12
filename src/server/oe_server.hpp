@@ -7,6 +7,7 @@
 #include "slipstream/codec/md_messages.hpp"
 #include "slipstream/marketdata/l1_book.hpp"
 #include "slipstream/marketdata/rolling_vwap.hpp"
+#include "slipstream/metrics/latency_recorder.hpp"
 #include "slipstream/report/execution_report.hpp"
 #include "slipstream/session/heartbeat_monitor.hpp"
 #include "slipstream/session/session_controller.hpp"
@@ -32,6 +33,7 @@ public:
     void close();                      // Tears down the OE connection.
 
     slipstream::report::ExecutionReport build_report() const;  // Snapshot of the run's totals.
+    const slipstream::metrics::LatencyRecorder& latency() const;  // Tick-to-order samples.
 
 private:
     void handle_trade(const slipstream::codec::Trade& trade);
@@ -48,6 +50,7 @@ private:
     std::optional<slipstream::session::HeartbeatMonitor> heartbeat_;  // Same.
 
     std::uint64_t next_order_id_ = 1;  // NewOrder.client_order_id, strictly increasing.
+    slipstream::metrics::LatencyRecorder latency_;  // Trade received -> NewOrder sent.
 
     // Report totals. Session VWAP covers every trade since start, unlike the rolling window.
     std::uint64_t market_qty_ = 0;

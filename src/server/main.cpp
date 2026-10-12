@@ -38,7 +38,7 @@ int main(int argc, char** argv) {
         oe_server.accept();
 
         server::run_event_loop(md_server, oe_server);
-        report::print_execution_report(oe_server.build_report());
+        report::print_execution_report(oe_server.build_report(), oe_server.latency());
     } catch (const std::exception& e) {
         std::cerr << "error: " << e.what() << '\n';
         return 1;

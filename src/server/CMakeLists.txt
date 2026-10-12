@@ -15,4 +15,5 @@ target_link_libraries(slipstream PRIVATE
     slipstream_strategy
     slipstream_session
     slipstream_report
+    slipstream_metrics
 )
